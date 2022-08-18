@@ -1,0 +1,17 @@
+{
+  "name": "WorkAround",
+  "version": "0.1.0",
+  "description": "Work around paywalls",
+  "permissions": ["tabs"],
+  "host_permissions": ["https://*.nytimes.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*.nytimes.com/*"],
+      "js": ["contentScript.js"]
+    }
+  ],
+  "manifest_version": 3
+}
