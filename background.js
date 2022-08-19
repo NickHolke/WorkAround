@@ -5,10 +5,10 @@ function handleUpdated(tabId, changeInfo, tabInfo) {
 }
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tabInfo) => {
-  if (changeInfo.status === 'complete') {
-    if (tabInfo.url && tabInfo.url.includes('nytimes'))
+  if (changeInfo.status === 'complete' && tabInfo.url) {
+    if (tabInfo.url.includes('nytimes'))
       chrome.tabs.sendMessage(tabId, {
-        type: 'NEW'
+        site: 'nytimes'
       });
   }
 });

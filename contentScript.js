@@ -1,44 +1,46 @@
 (() => {
   chrome.runtime.onMessage.addListener(request => {
+    const fn = paywallFunctions[request.site];
     if (
       document.readyState === 'complete' ||
       document.readyState === 'loaded'
     ) {
-      nytimesPaywall();
+      fn();
     } else {
-      window.addEventListener('DOMContentLoaded', nytimesPaywall);
+      window.addEventListener('DOMContentLoaded', fn);
     }
   });
 })();
 
-// Add a mutation observer on #root to watch for slower loading paywall
+const paywallFunctions = {
+  nytimes: () => {
+    const paywall = document.querySelector('#gateway-content');
 
-function nytimesPaywall() {
-  const paywall = document.querySelector('#gateway-content');
+    if (paywall) {
+      removeNytPaywall(paywall);
+    } else {
+      const root = document.querySelector('#app');
+      const config = { childList: true, subtree: true };
+      const observer = new MutationObserver(nytMutationCallback);
+      observer.observe(root, config);
+    }
 
-  if (paywall) {
-    removePaywall(paywall);
-  } else {
-    const root = document.querySelector('#app');
-    const mutationCallback = mutationList => {
+    function removeNytPaywall(paywall) {
+      paywall.style.display = 'none';
+      const overlay = document.querySelector('#app > div > div:first-child');
+      overlay.style.position = 'static';
+      overlay.querySelector(':scope > div:last-child').style.display = 'none';
+    }
+
+    function nytMutationCallback(mutationList, observer) {
       for (const mutation of mutationList) {
         mutation.addedNodes.forEach(node => {
           if (node.id === 'gateway-content') {
-            removePaywall(node);
+            removeNytPaywall(node);
             observer.disconnect();
           }
         });
       }
-    };
-    const config = { childList: true, subtree: true };
-    const observer = new MutationObserver(mutationCallback);
-    observer.observe(root, config);
+    }
   }
-}
-
-function removePaywall(paywall) {
-  paywall.style.display = 'none';
-  const overlay = document.querySelector('#app > div > div:first-child');
-  overlay.style.position = 'static';
-  overlay.querySelector(':scope > div:last-child').style.display = 'none';
-}
+};
