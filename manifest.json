@@ -13,5 +13,10 @@
       "js": ["contentScript.js"]
     }
   ],
+  "icons": {
+    "16": "wario_W_16.png",
+    "48": "wario_W_48.png",
+    "128": "wario_W_128.png"
+  },
   "manifest_version": 3
 }
