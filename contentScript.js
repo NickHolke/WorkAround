@@ -1,8 +1,5 @@
 (() => {
   chrome.runtime.onMessage.addListener(request => {
-    console.log('Message from the background script:');
-    console.log(request.type);
-
     if (
       document.readyState === 'complete' ||
       document.readyState === 'loaded'
@@ -14,9 +11,20 @@
   });
 })();
 
-function nytimesPaywall() {
-  const paywall = document.querySelector('#gateway-content');
+// Add a mutation observer on #root to watch for slower loading paywall
 
+function nytimesPaywall() {
+  //   const root = document.querySelector('#app');
+  //   const mutationCallback = mutationList => {
+  //     for (const mutation of mutationList) {
+  //       console.log('MUTATION');
+  //       console.log(mutation);
+  //     }
+  //   };
+  //   const config = { childList: true, subtree: true };
+  //   const observer = new MutationObserver(mutationCallback);
+  //   observer.observe(root, config);
+  const paywall = document.querySelector('#gateway-content');
   if (paywall) {
     paywall.style.display = 'none';
     const overlay = document.querySelector('#app > div > div:first-child');
