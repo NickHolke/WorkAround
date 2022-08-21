@@ -1,13 +1,14 @@
 (() => {
   chrome.runtime.onMessage.addListener(request => {
-    const fn = paywallFunctions[request.site];
+    const removePaywall = paywallFunctions[request.site];
+    // window.addEventListener('DOMContentLoaded', removePaywall);
     if (
       document.readyState === 'complete' ||
       document.readyState === 'loaded'
     ) {
-      fn();
+      removePaywall();
     } else {
-      window.addEventListener('DOMContentLoaded', fn);
+      window.addEventListener('DOMContentLoaded', removePaywall);
     }
   });
 })();
@@ -41,6 +42,31 @@ const paywallFunctions = {
           }
         });
       }
+    }
+  },
+  nymag: () => {
+    const root = document.querySelector('html');
+    const paywall = document.querySelector('#cliff-takeover');
+    if (root.hasAttribute('style') && paywall) {
+      removeNymPaywall(paywall);
+    } else {
+      const config = { attributes: true, attributeFilter: ['style'] };
+      const observer = new MutationObserver((mutationList, observer) => {
+        for (const mutation of mutationList) {
+          const paywall = document.querySelector('#cliff-takeover');
+          if (paywall) {
+            removeNymPaywall(paywall);
+          }
+          observer.disconnect();
+        }
+      });
+      observer.observe(root, config);
+    }
+
+    function removeNymPaywall(paywall) {
+      paywall.style.display = 'none';
+      root.style.overflowY = 'auto';
+      document.querySelector('body').style.position = 'static';
     }
   }
 };
