@@ -3,13 +3,16 @@
   "version": "0.1.0",
   "description": "Work around paywalls",
   "permissions": ["tabs"],
-  "host_permissions": ["https://*.nytimes.com/*", "https://*.nymag.com/*"],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
-      "matches": ["https://*.nytimes.com/*", "https://*.nymag.com/*"],
+      "matches": [
+        "https://*.nytimes.com/*",
+        "https://*.nymag.com/*",
+        "https://*.washingtonpost.com/*"
+      ],
       "js": ["contentScript.js"]
     }
   ],

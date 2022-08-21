@@ -1,15 +1,7 @@
 (() => {
   chrome.runtime.onMessage.addListener(request => {
     const removePaywall = paywallFunctions[request.site];
-    // window.addEventListener('DOMContentLoaded', removePaywall);
-    if (
-      document.readyState === 'complete' ||
-      document.readyState === 'loaded'
-    ) {
-      removePaywall();
-    } else {
-      window.addEventListener('DOMContentLoaded', removePaywall);
-    }
+    removePaywall();
   });
 })();
 
@@ -51,22 +43,45 @@ const paywallFunctions = {
       removeNymPaywall(paywall);
     } else {
       const config = { attributes: true, attributeFilter: ['style'] };
-      const observer = new MutationObserver((mutationList, observer) => {
-        for (const mutation of mutationList) {
-          const paywall = document.querySelector('#cliff-takeover');
-          if (paywall) {
-            removeNymPaywall(paywall);
-          }
+      const observer = new MutationObserver(nymMutationCallback);
+      observer.observe(root, config);
+    }
+
+    function nymMutationCallback(mutationList, observer) {
+      for (const mutation of mutationList) {
+        const paywall = document.querySelector('#cliff-takeover');
+        if (paywall) {
+          removeNymPaywall(paywall);
           observer.disconnect();
         }
-      });
-      observer.observe(root, config);
+      }
     }
 
     function removeNymPaywall(paywall) {
       paywall.style.display = 'none';
       root.style.overflowY = 'auto';
-      document.querySelector('body').style.position = 'static';
+      document.body.style.position = 'static';
+    }
+  },
+  wPost: () => {
+    const root = document.body;
+    const config = { attributes: true, attributeFilter: ['style'] };
+    const observer = new MutationObserver(wpMutationCallback);
+    observer.observe(root, config);
+
+    function wpMutationCallback(mutationList, observer) {
+      for (const mutation of mutationList) {
+        const paywall = document.querySelector('.paywall-overlay');
+        if (paywall) {
+          removeWpPaywall(paywall);
+          observer.disconnect();
+        }
+      }
+    }
+
+    function removeWpPaywall(paywall) {
+      paywall.style.display = 'none';
+      root.style.position = 'static';
     }
   }
 };
