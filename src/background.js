@@ -4,10 +4,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tabInfo) => {
     let site = '';
     if (url.includes('nytimes')) {
       site = 'nytimes';
-    } else if (url.includes('nymag')) {
+    } else if (url.includes('nymag') || url.includes('vulture')) {
       site = 'nymag';
-    } else if (url.includes('washingtonpost')) {
-      site = 'wPost';
     }
 
     if (site.length) {

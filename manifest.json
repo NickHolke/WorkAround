@@ -4,22 +4,23 @@
   "description": "Work around paywalls",
   "permissions": ["tabs"],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/background.js"
   },
   "content_scripts": [
     {
       "matches": [
         "https://*.nytimes.com/*",
         "https://*.nymag.com/*",
-        "https://*.washingtonpost.com/*"
+        "https://*.washingtonpost.com/*",
+        "https://*.vulture.com/*"
       ],
-      "js": ["contentScript.js"]
+      "js": ["dist/contentScript.js"]
     }
   ],
   "icons": {
-    "16": "wario_W_16.png",
-    "48": "wario_W_48.png",
-    "128": "wario_W_128.png"
+    "16": "src/media/wario_W_16.png",
+    "48": "src/media/wario_W_48.png",
+    "128": "src/media/wario_W_128.png"
   },
   "manifest_version": 3
 }
