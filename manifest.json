@@ -12,7 +12,8 @@
         "https://*.nytimes.com/*",
         "https://*.nymag.com/*",
         "https://*.washingtonpost.com/*",
-        "https://*.vulture.com/*"
+        "https://*.vulture.com/*",
+        "https://*.time.com/*"
       ],
       "js": ["dist/contentScript.js"]
     }

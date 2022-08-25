@@ -6,6 +6,8 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tabInfo) => {
       site = 'nytimes';
     } else if (url.includes('//nymag') || url.includes('www.vulture')) {
       site = 'nymag';
+    } else if (url.includes('//time')) {
+      site = 'time';
     }
 
     if (site.length) {
