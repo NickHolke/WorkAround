@@ -1,21 +1,28 @@
+import {
+  getNode,
+  setPositionStatic,
+  setDisplayNone,
+  initMutationObserver
+} from './helpers';
+
 export default function nytimes() {
-  const paywall = document.querySelector('#gateway-content');
+  const paywall = getNode('#gateway-content');
 
   if (paywall) {
     removeNytPaywall(paywall);
   } else {
-    const root = document.querySelector('#app');
+    const root = getNode('#app');
     const config = { childList: true, subtree: true };
-    const observer = new MutationObserver(nytMutationCallback);
-    observer.observe(root, config);
+    initMutationObserver(root, config, nytMutationCallback);
   }
 }
 
 function removeNytPaywall(paywall) {
-  paywall.style.display = 'none';
-  const overlay = document.querySelector('#app > div > div:first-child');
-  overlay.style.position = 'static';
-  overlay.querySelector(':scope > div:last-child').style.display = 'none';
+  const overlay = getNode('#app > div > div:first-child');
+  const secondOverlay = overlay.querySelector(':scope > div:last-child');
+  setDisplayNone(paywall);
+  setPositionStatic(overlay);
+  setDisplayNone(secondOverlay);
 }
 
 function nytMutationCallback(mutationList, observer) {
