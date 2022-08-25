@@ -18,3 +18,9 @@ export function initMutationObserver(root, config, cb) {
   const observer = new MutationObserver(cb);
   observer.observe(root, config);
 }
+
+export function removeBasicPaywall(paywall, positionNode, overflowNode) {
+  setDisplayNone(paywall);
+  setPositionStatic(positionNode);
+  setOverflowyAuto(overflowNode);
+}

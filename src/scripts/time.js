@@ -1,19 +1,8 @@
-import {
-  getNode,
-  setPositionStatic,
-  setDisplayNone,
-  setOverflowyAuto
-} from './helpers';
+import { getNode, removeBasicPaywall } from './helpers';
 
 export default function time() {
   const paywall = getNode('.registration-wall');
   if (paywall) {
-    removeTimePaywall(paywall);
+    removeBasicPaywall(paywall, document.body, document.body);
   }
-}
-
-function removeTimePaywall(paywall) {
-  setDisplayNone(paywall);
-  setPositionStatic(document.body);
-  setOverflowyAuto(document.body);
 }
