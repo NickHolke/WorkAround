@@ -1,26 +1,15 @@
 import { getNode, removeBasicPaywall, initMutationObserver } from './helpers';
 
 export default function nymag() {
-  // const root = getNode('html');
-  // const paywall = getNode('#cliff-takeover');
-  // if (root.hasAttribute('style') && paywall) {
-  //   removeBasicPaywall(paywall, document.body, root);
-  // } else {
-  //   const config = { attributes: true, attributeFilter: ['style'] };
-  //   initMutationObserver(root, config, nymMutationCallback);
-  // }
-  const articleNode = getNode('.article-content');
-  const config = { childList: true, subtree: true };
-  const observer = new MutationObserver((mutationList, observer) => {
-    for (const mutation of mutationList) {
-      const { removedNodes, nextSibling, target: parentNode } = mutation;
-      if (mutation.removedNodes.length) {
-        parentNode.insertBefore(removedNodes[0], nextSibling);
-      }
-    }
-  });
-
-  observer.observe(document.body, config);
+  const root = getNode('html');
+  const paywall = getNode('#cliff-takeover');
+  addParagraphsBack();
+  if (root.hasAttribute('style') && paywall) {
+    removeBasicPaywall(paywall, document.body, root);
+  } else {
+    const config = { attributes: true, attributeFilter: ['style'] };
+    initMutationObserver(root, config, nymMutationCallback);
+  }
 }
 
 function nymMutationCallback(mutationList, observer) {
@@ -31,4 +20,20 @@ function nymMutationCallback(mutationList, observer) {
       observer.disconnect();
     }
   }
+}
+
+function addParagraphsBack() {
+  const config = { childList: true, subtree: true };
+  const observer = new MutationObserver((mutationList, observer) => {
+    const articleNode = getNode('.article-content');
+    for (const mutation of mutationList) {
+      const { removedNodes, nextSibling, target: parentNode } = mutation;
+      if (removedNodes.length && parentNode === articleNode) {
+        parentNode.insertBefore(removedNodes[0], nextSibling);
+      }
+    }
+    observer.disconnect();
+  });
+
+  observer.observe(document.body, config);
 }
