@@ -1,7 +1,7 @@
 {
   "name": "WorkAround",
   "version": "0.1.0",
-  "description": "Work around paywalls",
+  "description": "Disable paywalls for the New York Times and Time Magazine.",
   "permissions": ["tabs"],
   "background": {
     "service_worker": "background.js"
